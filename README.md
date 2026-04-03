@@ -1,90 +1,143 @@
-# Ankr的个人主页
+# Ankr Wu - 个人主页
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue?logo=github)](https://ankr.github.io)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
-
-这是一个极简主义风格的个人主页，专为工商业分布式光伏从业者设计。
+这是一个极简主义风格的个人主页，专为工商业分布式光伏产业从业者设计。
 
 ## 🌟 特性
 
-- **极简科技风**：深色背景搭配光伏蓝/能源绿点缀色
-- **动态粒子背景**：Canvas 实现的能量网络动画
-- **打字机效果**：展示职业身份
-- **玻璃拟态设计**：现代化卡片布局
-- **GitHub 集成**：自动获取并展示最新仓库
+- **极简设计**：简单大方，略带科技感
+- **动态效果**：
+  - Canvas 粒子网络背景动画（象征能源连接）
+  - 打字机效果展示职业身份
+  - 滚动淡入动画
+  - 玻璃拟态卡片设计
+- **技术栈**：
+  - 原生 HTML + CSS + JavaScript
+  - Tailwind CSS (CDN 引入)
+  - GitHub API 自动获取项目
 - **响应式设计**：完美适配桌面和移动设备
-- **无构建步骤**：纯 HTML + Tailwind CSS (CDN) + Vanilla JS
 
 ## 🚀 部署到 GitHub Pages
 
-### 方法一：自动部署（推荐）
+### 方法一：使用 GitHub Actions（推荐）
 
-1. 确保此仓库名为 `ankr.github.io`
-   ```bash
-   # 如果当前仓库名不是这个，请在 GitHub 上重命名
-   ```
+1. 在本仓库根目录创建 `.github/workflows/deploy.yml`：
 
-2. 启用 GitHub Pages：
-   - 进入仓库 **Settings** > **Pages**
-   - Source 选择 **Deploy from a branch**
-   - Branch 选择 **main** (或 master)
-   - Folder 选择 **/(root)**
-   - 点击 **Save**
+```yaml
+name: Deploy to GitHub Pages
 
-3. 等待几分钟，访问：https://ankr.github.io
+on:
+  push:
+    branches:
+      - main
 
-### 方法二：手动推送
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+2. 提交并推送代码：
 ```bash
-# 提交更改
 git add .
-git commit -m "feat: 添加个人主页"
+git commit -m "Add personal website"
 git push origin main
 ```
 
-## 📁 文件结构
+3. 在 GitHub 仓库设置中：
+   - 进入 Settings → Pages
+   - Source 选择 "GitHub Actions"
+   - 等待部署完成
+
+### 方法二：直接使用 gh-pages 分支
+
+1. 创建 gh-pages 分支：
+```bash
+git checkout --orphan gh-pages
+git reset --hard
+git add .
+git commit -m "Deploy personal website"
+git push origin gh-pages --force
+```
+
+2. 在 GitHub 仓库设置中：
+   - 进入 Settings → Pages
+   - Source 选择 "gh-pages" 分支
+   - 保存后等待几分钟
+
+## 📱 访问地址
+
+部署完成后，您的网站将在以下地址可用：
 
 ```
-ankr.github.io/
-├── index.html          # 主页面（包含所有样式和脚本）
-└── README.md           # 说明文档
+https://ankr.github.io/
 ```
 
 ## 🎨 自定义
 
 ### 修改个人信息
-编辑 `index.html` 中的以下内容：
 
-- **头像**：搜索 `img src` 替换 URL
-- **邮箱**：搜索 `angkorwu@gmail.com` 替换
-- **介绍文字**：搜索 `工商业分布式光伏产业从业` 修改
-- **技能条**：调整 `width: 90%` 等百分比
+编辑 `index.html` 文件中的以下内容：
 
-### 颜色主题
-在 `<script>` 标签内的 `tailwind.config` 中修改 `solar` 颜色值：
+- **姓名**：搜索 "Ankr Wu" 进行替换
+- **职业描述**：搜索 "工商业分布式光伏产业从业者"
+- **联系方式**：搜索 "angkorwu@gmail.com"
+- **头像**：修改 img 标签的 src 属性
+- **统计数据**：在 About 部分修改数字
+
+### 调整颜色主题
+
+在 `index.html` 的 Tailwind 配置部分修改颜色：
 
 ```javascript
 colors: {
-    solar: {
-        400: '#22d3ee', // 主色调
-        500: '#0ea5e9', // 悬停色
-        600: '#0284c7', // 深色
-    }
+    'solar-blue': '#0ea5e9',  // 主色调
+    'solar-green': '#10b981', // 辅助色
 }
 ```
 
-## 🛠️ 技术栈
+## 📄 文件结构
 
-- HTML5
-- Tailwind CSS (v3 via CDN)
-- Vanilla JavaScript
-- FontAwesome (图标)
-- Google Fonts (Inter 字体)
+```
+.
+├── index.html          # 主页面
+└── README.md           # 说明文档
+```
 
-## 📄 许可证
+## 🌐 技术细节
 
-MIT License
+- **粒子动画**：使用 HTML5 Canvas 实现，模拟能源网络连接效果
+- **打字机效果**：纯 JavaScript 实现，展示职业身份
+- **GitHub API**：自动获取并展示最新的 6 个仓库
+- **玻璃拟态**：使用 backdrop-filter 实现磨砂玻璃效果
+- **响应式导航**：移动端自动切换为汉堡菜单
+
+## 📞 联系
+
+- **Email**: angkorwu@gmail.com
+- **GitHub**: https://github.com/ankr
 
 ---
 
-**Built with ❤️ by Ankr Wu**
+**Powered by clean energy & clean code** ⚡🌱
